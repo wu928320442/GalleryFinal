@@ -14,9 +14,13 @@ FunctionConfig config = new FunctionConfig.Builder()
                 .setEnablePreview(true)//是否开启预览功能
                 .setEnableCompress(true)//开启压缩图片模式
 ```
+# 获取压缩路径
+```java
+photoInfo.getThumbPath()
+```
 # 关于作者
-* **QQ:**928320442
-* **Email:**<wujiajun311@gmail.com>
+* QQ:928320442
+* Email:<wujiajun311@gmail.com>
 
 ![](images/gallery_final_effect.png)
 # GalleryFinal简介
