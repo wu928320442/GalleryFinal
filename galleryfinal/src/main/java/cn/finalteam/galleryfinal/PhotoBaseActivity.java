@@ -18,7 +18,9 @@ package cn.finalteam.galleryfinal;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -36,6 +38,7 @@ import cn.finalteam.toolsfinal.DateUtils;
 import cn.finalteam.toolsfinal.DeviceUtils;
 import cn.finalteam.toolsfinal.StringUtils;
 import cn.finalteam.toolsfinal.io.FileUtils;
+import cn.finalteam.toolsfinal.io.FilenameUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -178,12 +181,44 @@ public abstract class PhotoBaseActivity extends Activity implements EasyPermissi
         }
     }
 
-    protected void resultData(ArrayList<PhotoInfo> photoList) {
-        GalleryFinal.OnHanlderResultCallback callback = GalleryFinal.getCallback();
-        int requestCode = GalleryFinal.getRequestCode();
+    protected void resultData(final ArrayList<PhotoInfo> photoList) {
+        final GalleryFinal.OnHanlderResultCallback callback = GalleryFinal.getCallback();
+        final int requestCode = GalleryFinal.getRequestCode();
         if (callback != null) {
-            if ( photoList != null && photoList.size() > 0 ) {
-                callback.onHanlderSuccess(requestCode, photoList);
+            if ( photoList != null/* && photoList.size() > 0 */) {
+                boolean isCompress = GalleryFinal.getFunctionConfig().isEnableCompress();
+                if (isCompress) {
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            for (PhotoInfo photoInfo : photoList) {
+                                final String ext = FilenameUtils.getExtension(photoInfo.getPhotoPath());
+                                Bitmap.CompressFormat format;
+                                if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg")) {
+                                    format = Bitmap.CompressFormat.JPEG;
+                                } else {
+                                    format = Bitmap.CompressFormat.PNG;
+                                }
+                                File file = new File(GalleryFinal.getCoreConfig().getThumbPhotoCacheFolder(), Utils.getFileName(photoInfo.getPhotoPath()) + "_thumb." + ext);
+                                Bitmap thumbBitmap = Utils.rotateBitmap(photoInfo.getPhotoPath(), 0, mScreenWidth, mScreenHeight);
+                                Utils.saveBitmap(thumbBitmap, format, file);
+                                if (thumbBitmap != null) {
+                                    thumbBitmap.recycle();
+                                    thumbBitmap = null;
+                                }
+                                photoInfo.setThumbPath(file.getAbsolutePath());
+                            }
+                            return null;
+                        }
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            super.onPostExecute(aVoid);
+                            callback.onHanlderSuccess(requestCode, photoList);
+                        }
+                    }.execute();
+                } else {
+                    callback.onHanlderSuccess(requestCode, photoList);
+                }
             } else {
                 callback.onHanlderFailure(requestCode, getString(R.string.photo_list_empty));
             }

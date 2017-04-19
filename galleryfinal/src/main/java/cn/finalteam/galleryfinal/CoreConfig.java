@@ -33,6 +33,7 @@ public class CoreConfig {
     private ImageLoader imageLoader;
     private File takePhotoFolder;
     private File editPhotoCacheFolder;
+    private File thumbPhotoCacheFolder;
     private ThemeConfig themeConfig;
     private FunctionConfig functionConfig;
     private int animRes;
@@ -43,6 +44,7 @@ public class CoreConfig {
         this.imageLoader = builder.imageLoader;
         this.takePhotoFolder = builder.takePhotoFolder;
         this.editPhotoCacheFolder = builder.editPhotoCacheFolder;
+        this.thumbPhotoCacheFolder = builder.thumbPhotoCacheFolder;
         this.themeConfig = builder.themeConfig;
         this.functionConfig = builder.functionConfig;
         if(builder.noAnimcation) {
@@ -65,6 +67,13 @@ public class CoreConfig {
         if (!editPhotoCacheFolder.exists()) {
             editPhotoCacheFolder.mkdirs();
         }
+
+        if (thumbPhotoCacheFolder == null) {
+            thumbPhotoCacheFolder = new File(Environment.getExternalStorageDirectory() + "/GalleryFinal/thumbtemp/");
+        }
+        if (!thumbPhotoCacheFolder.exists()) {
+            thumbPhotoCacheFolder.mkdirs();
+        }
     }
 
     public static class Builder {
@@ -73,6 +82,7 @@ public class CoreConfig {
         private ImageLoader imageLoader;
         private File takePhotoFolder;//配置拍照缓存目录
         private File editPhotoCacheFolder;//配置编辑图片产生的文件缓存目录
+        private File thumbPhotoCacheFolder;//缩略图文件缓存目录
         private FunctionConfig functionConfig;
         private int animRes;
         private boolean noAnimcation;
@@ -92,6 +102,11 @@ public class CoreConfig {
 
         public Builder setEditPhotoCacheFolder(File editPhotoCacheFolder) {
             this.editPhotoCacheFolder = editPhotoCacheFolder;
+            return this;
+        }
+
+        public Builder setThumbPhotoCacheFolder(File thumbPhotoCacheFolder){
+            this.thumbPhotoCacheFolder = thumbPhotoCacheFolder;
             return this;
         }
 
@@ -143,6 +158,10 @@ public class CoreConfig {
 
     public File getEditPhotoCacheFolder() {
         return editPhotoCacheFolder;
+    }
+
+    public File getThumbPhotoCacheFolder() {
+        return thumbPhotoCacheFolder;
     }
 
     public int getAnimation() {

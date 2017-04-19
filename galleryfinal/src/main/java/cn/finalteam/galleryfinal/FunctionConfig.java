@@ -45,6 +45,7 @@ public class FunctionConfig implements Cloneable{
     private boolean forceCrop;//强制裁剪
     private boolean forceCropEdit;//强制裁剪后是否可对图片编辑，默认不可以
     private boolean preview;//预览
+    private boolean isCompress;//是否压缩返回的图片
     private ArrayList<String> selectedList;
     private ArrayList<String> filterList;//过滤器
 
@@ -65,6 +66,7 @@ public class FunctionConfig implements Cloneable{
         this.forceCrop = builder.forceCrop;
         this.forceCropEdit = builder.forceCropEdit;
         this.preview = builder.preview;
+        this.isCompress = builder.isCompress;
     }
 
     public static class Builder {
@@ -84,6 +86,7 @@ public class FunctionConfig implements Cloneable{
         private boolean forceCrop;//强制裁剪
         private boolean forceCropEdit;//强制裁剪后是否可对图片编辑，默认不可以
         private boolean preview;//预览
+        private boolean isCompress;//是否压缩返回的图片
 
         protected Builder setMutiSelect(boolean mutiSelect) {
             this.mutiSelect = mutiSelect;
@@ -222,6 +225,11 @@ public class FunctionConfig implements Cloneable{
             return this;
         }
 
+        public Builder setEnableCompress(boolean isCompress){
+            this.isCompress = isCompress;
+            return this;
+        }
+
         public FunctionConfig build() {
             return new FunctionConfig(this);
         }
@@ -289,6 +297,10 @@ public class FunctionConfig implements Cloneable{
 
     public boolean isEnablePreview(){
         return preview;
+    }
+
+    public boolean isEnableCompress(){
+        return isCompress;
     }
 
     @Override
