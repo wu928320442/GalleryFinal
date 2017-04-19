@@ -1,3 +1,23 @@
+# 写在前面 因为该库已经不维护了 项目中遇到一些问题 进行了修复
+* 1.解决当选择了多张图片，进入选择页面必须选择一个才能使用的问题
+* 2.增加压缩配置，自动返回压缩的图片
+
+# 开启压缩图片模式 举例
+```java
+FunctionConfig config = new FunctionConfig.Builder()
+                .setMutiSelectMaxSize(picNumColumns)//配置多选数量
+                .setEnableEdit(true)//开启编辑功能
+                .setEnableCrop(true)//开启裁剪功能
+                .setEnableRotate(true)//开启选择功能
+                .setEnableCamera(true)//开启相机功能
+                .setSelected(picList)//添加已选列表,只是在列表中默认呗选中不会过滤图片
+                .setEnablePreview(true)//是否开启预览功能
+                .setEnableCompress(true)//开启压缩图片模式
+```
+# 关于作者
+* **QQ:**928320442
+* **Email:**<wujiajun311@gmail.com>
+
 ![](images/gallery_final_effect.png)
 # GalleryFinal简介
 Android自定义相册，实现了拍照、图片选择（单选/多选）、 裁剪（单/多裁剪）、旋转、ImageLoader无绑定任由开发者选择、功能可配置、主题样式可配置。GalleryFinal为你定制相册。
